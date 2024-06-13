@@ -1,5 +1,4 @@
 import AboutUs from "./components/AboutUs"
-import Contact from "./components/Contact"
 import Hero from "./components/Hero"
 import Menu from "./components/Menu"
 
@@ -10,7 +9,6 @@ function App() {
       <Hero />
       <Menu />
       <AboutUs/>
-      <Contact />
     </main>
   )
 }

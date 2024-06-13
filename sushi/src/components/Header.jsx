@@ -1,11 +1,10 @@
-import Logo from '../assets/logo.svg'
+import Logo from '../assets/logo.webp'
 
 const Header = () => {
     const navbar = [
         {id:1, title:"Home", link:"#hero"},
         {id:2, title:"Menu", link:"#menu"},
         {id:3, title:"Sobre Nós", link:"#about"},
-        {id:4, title:"Contato", link:"#contact"}
     ]
     return (
     <header className='flex items-center justify-around w-full py-4 z-50 fixed top-0 mx-auto text-zinc-50 bg-zinc-950'>

@@ -1,4 +1,4 @@
-import AboutImg from '../assets/aboutImg.svg'
+import AboutImg from '../assets/aboutImg.webp'
 
 const AboutUs = () => {
   return (
