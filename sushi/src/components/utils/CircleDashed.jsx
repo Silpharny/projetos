@@ -1,9 +1,9 @@
 const CircleDashed = () => {
   const circles = [
-    { id: 1, title: "Frete Grátis", position: "right-[120px] top-[-20px]" },
-    { id: 2, title: "Faça seu pedido", position: "right-[550px] top-[-90px]" },
-    { id: 3, title: "Promoção Limitada", position: "right-[170px] top-[70px]" },
-    { id: 4, title: "Nosso Queridinho", position: "right-[450px] top-[70px]" },
+    { id: 1, title: "Frete Grátis", position: "right-[-550px] top-[-40px]" },
+    { id: 2, title: "Faça seu pedido", position: "right-[-500px] top-[190px]" },
+    { id: 4, title: "Nosso Queridinho", position: "right-[-270px] top-[170px]" },
+    { id: 3, title: "Promoção Limitada", position: "right-[-200px] top-[-330px]" },
   ];
 
   return (

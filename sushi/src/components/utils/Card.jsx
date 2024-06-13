@@ -75,13 +75,13 @@ const Card = () => {
               <p className="font-bold text-3xl text-[#ff0019]">R${item.price}</p>
               <span className="italic line-through font-medium">{item.subPrice = (item.price * 0.2 + item.price).toFixed(2)}</span>
             </div>
-            <Button title="Fazer pedido no Whatsapp" classGeral="flex-row-reverse hover:bg-opacity-70" icon="fa-brands fa-whatsapp font-bold"/>
+            <Button title="Pedido no Whatsapp" classGeral="flex-row-reverse hover:bg-opacity-70" icon="fa-brands fa-whatsapp font-bold"/>
           </div>
           
           : '')}
       </Modal>
 
-      <div className="flex gap-10">
+      <div className="flex flex-col gap-10 lg:gap-0 lg:flex-row w-full items-center justify-around">
         {listItem.map((item) => (
           <button onClick={(event) => add(event.currentTarget.classList.value)} className={item.id} key={item.id}>
             <li className="newli w-72 h-80 shadow-sm cursor-pointer hover:bg-zinc-200 hover:scale-105 transition-all delay-75 shadow-zinc-600 rounded-lg flex flex-col items-center justify-center">
