@@ -12,7 +12,7 @@ function App() {
       <p>"Desenvolvedor Front-end"</p>
 
       <button>GitGub</button>
-      <button>Frontend Mentor</button>
+      <button>Portfólio</button>
       <button>Linkedin</button>
       <button>Instagram</button>
     </Background>
@@ -31,6 +31,11 @@ const Background = styled.main `
 
     background-color: hsl(0, 0%, 12%);
     border-radius: 30px;
+
+
+  @media(max-width:600px) {
+      width: 360px;
+    }
 
   .img{
     width: 110px;
@@ -83,6 +88,7 @@ const Background = styled.main `
       background-color: hsl(0, 0%, 26%);
     }
   }
+
 
 `
 
