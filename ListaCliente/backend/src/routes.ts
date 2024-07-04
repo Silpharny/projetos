@@ -5,17 +5,14 @@ import { DeleteCustomerController } from "./controllers/DeleteCustomerController
 
 
 export async function routes(fastfify:FastifyInstance, options:FastifyPluginOptions) {
-    
-    fastfify.get('/teste', async(request:FastifyRequest, reply:FastifyReply) => {
-        return{ok:true}
+
+
+    fastfify.get('/customers', async(request:FastifyRequest, reply:FastifyReply) => {
+        return new ListCustomerController().handle(request,reply)
     })
 
     fastfify.post('/customer', async(request:FastifyRequest, reply:FastifyReply) => {
         return new CreateCustomerController().handle(request,reply)
-    })
-
-    fastfify.get('/customers', async(request:FastifyRequest, reply:FastifyReply) => {
-        return new ListCustomerController().handle(request,reply)
     })
 
     fastfify.delete('/customer', async(request:FastifyRequest, reply:FastifyReply) => {

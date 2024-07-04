@@ -1,11 +1,8 @@
-import { Header } from "../components/Header"
-
 export const Home = () => {
     
   return (
-    <>
-      <Header/>
-      <h1>ola</h1>
-    </>
+    <main>
+      <img src={} alt='img' />
+    </main>
   )
 }

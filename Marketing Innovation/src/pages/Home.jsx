@@ -31,7 +31,7 @@ function Home() {
       <section className="w-full p-12 text-center flex flex-col justify-center items-center gap-3 bg-zinc-200">
         <p className="text-sm text-zinc-600"></p>
         <h2 className="font-bold text-5xl">Event Speakers</h2>
-        <p className="text-sm text-zinc-600">Join industry leaders to learn, inspire and connect</p>
+        <p className="text-sm text-zinc-600">Join industFry leaders to learn, inspire and connect</p>
         <div className="grid gap-10 md:grid-cols-3 grid-cols-2">
           <CardSpeakers img={AaronCox} name="Aaron Cox" senior="CEO & Manager" />
           <CardSpeakers img={SophieStewart} name="Sophie Stewart" senior="Marketing Coordinator" />
