@@ -1,41 +1,51 @@
 import { Link } from "expo-router";
-import React from "react";
-import {
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import React, { useState } from "react";
+import { Image, StyleSheet } from "react-native";
+import Input from "../../src/components/Input/input";
+import Button from "../../src/components/Button/button";
 
-export default function Home() {
+export default function SignIn() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  function handleLogin() {
+    alert(`${email}, ${password}`);
+  }
+
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle={"light-content"} backgroundColor="#11111" />
-      <View>
-        <Text style={styles.title}>DevPost</Text>
-        <TextInput style={styles.input}>ss</TextInput>
-        <TextInput style={styles.input}>ss</TextInput>
-        <TouchableOpacity style={styles.button}>
-          <Text>Acessar</Text>
-        </TouchableOpacity>
-        <Link href="/signUp" style={styles.link}>
-          Criar uma conta
-        </Link>
-      </View>
-    </SafeAreaView>
+    <>
+      <Image source={require("../../assets/DevPost.png")} style={styles.logo} />
+      <Input
+        placeholder="email@email.com"
+        onChangeText={(txt) => setEmail(txt)}
+        value={email}
+      />
+      <Input
+        placeholder="********"
+        onChangeText={(txt) => setPassword(txt)}
+        value={password}
+      />
+      <Button title="Entrar" btnPress={handleLogin} />
+      <Link style={styles.link} href="/signUp">
+        Criar uma conta
+      </Link>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#11111",
+  logo: {
+    marginBottom: 50,
   },
-  title: {},
+  title: {
+    color: "#fff",
+  },
   input: {},
   button: {},
-  link: {},
+  link: {
+    fontSize: 16,
+    marginTop: 10,
+    color: "#fff",
+    fontStyle: "italic",
+  },
 });
