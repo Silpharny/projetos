@@ -1,4 +1,4 @@
-import react, { useState } from "react";
+import react, { useState, useContext } from "react";
 import { Text } from "react-native";
 import {
   Button,
@@ -10,12 +10,16 @@ import {
   ToRegister,
 } from "./styles";
 
+import { AuthContext } from "../../contexts/auth";
+
 export default function Login() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [login, setLogin] = useState(true);
+
+  const { handleCreateUser, handleLoginUser } = useContext(AuthContext);
 
   if (login) {
     return (
@@ -36,7 +40,7 @@ export default function Login() {
           value={password}
           onChangeText={(text) => setPassword(text)}
         />
-        <Button onPress={() => console.log(`${email} => ${password} `)}>
+        <Button onPress={() => handleLoginUser(email, password)}>
           <TextButton>Entrar</TextButton>
         </Button>
 
@@ -76,9 +80,7 @@ export default function Login() {
         value={password}
         onChangeText={(text) => setPassword(text)}
       />
-      <Button
-        onPress={() => console.log(`${name} => ${email} => ${password} `)}
-      >
+      <Button onPress={() => handleCreateUser(name, email, password)}>
         <TextButton>Registrar</TextButton>
       </Button>
 
@@ -90,7 +92,7 @@ export default function Login() {
           setPassword("");
         }}
       >
-        <TextRegister>Criar uma conta</TextRegister>
+        <TextRegister>Já tenho conta</TextRegister>
       </ToRegister>
     </Container>
   );
