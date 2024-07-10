@@ -9,7 +9,7 @@ dist/
 web-build/
 
 # auth
-src/firebaseConfig.*
+src/firebaseConfig.js
 
 # Native
 *.orig.*
