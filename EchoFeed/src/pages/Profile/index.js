@@ -1,5 +1,5 @@
 import { Text, View } from "react-native";
-import { Container, Title } from "./styles";
+import { Container, Title, Button, TextButton } from "./styles";
 import ImageProfile from "../../components/PickImage";
 
 export default function Profile() {
@@ -14,6 +14,9 @@ export default function Profile() {
       <View>
         <ImageProfile />
       </View>
+      <Button>
+        <TextButton>Atualizar Perfil</TextButton>
+      </Button>
     </Container>
   );
 }

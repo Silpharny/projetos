@@ -1,5 +1,5 @@
 import react, { useState, useContext } from "react";
-import { Text } from "react-native";
+import { ActivityIndicator, Text } from "react-native";
 import {
   Button,
   Container,
@@ -19,7 +19,8 @@ export default function Login() {
 
   const [login, setLogin] = useState(true);
 
-  const { handleCreateUser, handleLoginUser } = useContext(AuthContext);
+  const { authLoading, handleCreateUser, handleLoginUser } =
+    useContext(AuthContext);
 
   if (login) {
     return (
@@ -41,7 +42,11 @@ export default function Login() {
           onChangeText={(text) => setPassword(text)}
         />
         <Button onPress={() => handleLoginUser(email, password)}>
-          <TextButton>Entrar</TextButton>
+          {authLoading ? (
+            <ActivityIndicator size={20} color="#fff" />
+          ) : (
+            <TextButton>Entrar</TextButton>
+          )}
         </Button>
 
         <ToRegister
@@ -80,8 +85,12 @@ export default function Login() {
         value={password}
         onChangeText={(text) => setPassword(text)}
       />
-      <Button onPress={() => handleCreateUser(name, email, password)}>
-        <TextButton>Registrar</TextButton>
+      <Button onPress={() => handleCreateUser(email, password, name)}>
+        {authLoading ? (
+          <ActivityIndicator size={20} color="#fff" />
+        ) : (
+          <TextButton>Registrar</TextButton>
+        )}
       </Button>
 
       <ToRegister

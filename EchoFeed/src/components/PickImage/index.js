@@ -5,11 +5,9 @@ import * as ImagePicker from "expo-image-picker";
 export default function ImageProfile() {
   const [image, setImage] = useState(null);
 
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
+  async function pickImage() {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       aspect: [4, 3],
       quality: 1,
     });
@@ -19,7 +17,7 @@ export default function ImageProfile() {
     if (!result.canceled) {
       setImage(result.assets[0].uri);
     }
-  };
+  }
 
   return (
     <View style={styles.container}>

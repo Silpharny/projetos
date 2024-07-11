@@ -1,20 +1,15 @@
 import react, { createContext, useState, useEffect } from "react";
-import { auth, db } from "../firebaseConfig";
+import { auth, db } from "../.firebaseConfig";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  getAuth,
   onAuthStateChanged,
 } from "firebase/auth";
 
-import {
-  doc,
-  getDoc,
-  onSnapshot,
-  setDoc,
-  collection,
-} from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const AuthContext = createContext({});
 
@@ -23,67 +18,89 @@ export default function AuthProvider({ children }) {
 
   const [loading, setLoading] = useState(true);
 
+  const [authLoading, setAuthLoading] = useState(false);
+
+  async function storageUser(data) {
+    await AsyncStorage.setItem("@echofeed", JSON.stringify(data));
+  }
+
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setAuthUser({
-          uid: user.uid,
-          name: user.displayName,
-          email: user.email,
-        });
+    async function loadStorage() {
+      const storageUser = await AsyncStorage.getItem("@echofeed");
+
+      if (storageUser) {
+        setAuthUser(JSON.parse(storageUser));
         setLoading(false);
       } else {
         setAuthUser(null);
         setLoading(false);
       }
-    });
-
-    return () => unsubscribe();
+    }
+    loadStorage();
   }, []);
 
   async function handleCreateUser(email, password, name) {
+    setAuthLoading(true);
+
     if (email === "" || password === "" || name === "") {
       alert("Preencha todos os campos!");
+      setAuthLoading(false);
       return;
     }
-    createUserWithEmailAndPassword(auth, email, password, name)
-      .then((user) => {
-        setAuthUser({
-          uid: user.user.uid,
-          name: user.user.displayName,
-          email: user.user.email,
-        });
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(async (value) => {
+        let uid = value.user.uid;
+        let data = {
+          name: name,
+          createAt: new Date(),
+        };
 
-        console.log("Usuário criado:", user);
+        setDoc(doc(db, "users", uid), data);
+
+        setAuthUser(data);
+        storageUser(data);
+        setAuthLoading(false);
       })
-      .catch((err) => console.error("Erro ao criar usuário:", err));
+
+      .catch((err) => {
+        console.error("Erro ao criar usuário:", err);
+        setAuthLoading(false);
+      });
   }
 
   async function handleLoginUser(email, password) {
+    setAuthLoading(true);
+
     if (email === "" || password === "") {
       alert("Preencha todos os campos!");
+      setAuthLoading(false);
       return;
     }
-    signInWithEmailAndPassword(auth, email, password)
-      .then((user) => {
-        setAuthUser({
-          uid: user.user.uid,
-          name: user.user.displayName,
-          email: user.user.email,
+    await signInWithEmailAndPassword(auth, email, password)
+      .then((value) => {
+        let uid = value.user.uid;
+        const docRef = doc(db, "users", uid);
+        getDoc(docRef).then((doc) => {
+          let data = {
+            uid: value.user.uid,
+            name: doc.data().name,
+            email: value.user.email,
+          };
+
+          setAuthUser(data);
+          storageUser(data);
+          setAuthLoading(false);
         });
-        console.log("usuário logado!");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log("Erro ao entrar:", err);
+        setAuthLoading(false);
+      });
   }
 
   async function handleLogout() {
     signOut(auth);
-  }
-
-  // =========== Firestore ===========
-
-  async function handleRegister() {
-    await setDoc(doc(db, "users", 3), {});
+    AsyncStorage.clear().then(() => setAuthUser(null));
   }
 
   return (
@@ -94,6 +111,8 @@ export default function AuthProvider({ children }) {
         handleCreateUser,
         handleLoginUser,
         handleLogout,
+        authUser,
+        authLoading,
       }}
     >
       {children}
