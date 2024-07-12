@@ -8,14 +8,30 @@ import PostUser from "../pages/PostsUser";
 
 export default function StackRoutes() {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name="home" component={Home} />
-      <Stack.Screen name="newpost" component={NewPost} />
-      <Stack.Screen name="postuser" component={PostUser} />
+    <Stack.Navigator>
+      <Stack.Screen
+        name="home"
+        component={Home}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="newpost"
+        component={NewPost}
+        options={{
+          title: "Novo Post",
+          headerTintColor: "#fff",
+          headerStyle: { backgroundColor: "#36393f" },
+        }}
+      />
+      <Stack.Screen
+        name="postuser"
+        component={PostUser}
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 }

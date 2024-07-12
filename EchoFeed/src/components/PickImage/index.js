@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { Button, Image, View, StyleSheet } from "react-native";
+
 import * as ImagePicker from "expo-image-picker";
+
+import { ContainerPhoto, ProfileImage } from "./styles";
 
 export default function ImageProfile() {
   const [image, setImage] = useState(null);
@@ -20,21 +22,12 @@ export default function ImageProfile() {
   }
 
   return (
-    <View style={styles.container}>
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
-      {image && <Image source={{ uri: image }} style={styles.image} />}
-    </View>
+    <ContainerPhoto>
+      {image ? (
+        image
+      ) : (
+        <ProfileImage source={require("../../assets/avatar.png")} />
+      )}
+    </ContainerPhoto>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  image: {
-    width: 200,
-    height: 200,
-  },
-});

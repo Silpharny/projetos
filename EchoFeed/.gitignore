@@ -2,6 +2,7 @@
 
 # dependencies
 node_modules/
+.env
 
 # Expo
 .expo/
@@ -9,7 +10,7 @@ dist/
 web-build/
 
 # auth
-src\firebaseConfig.js
+src/firebaseConfig.js
 
 # Native
 *.orig.*

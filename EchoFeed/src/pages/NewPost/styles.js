@@ -2,48 +2,27 @@ import styled from "styled-components/native";
 
 export const Container = styled.View`
   flex: 1;
-  align-items: center;
-  background-color: #404248;
+
+  background-color: #404349;
 `;
 
-export const Header = styled.View`
-  background-color: #353840;
-  height: 70px;
-  width: 100%;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: row;
-  padding: 0 24px;
+export const Input = styled.TextInput`
+  margin: 10px;
+  background-color: transparent;
+  font-size: 20px;
+  color: #fff;
 `;
 
-export const BackButton = styled.Pressable`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 110px;
-`;
-
-export const ShareButton = styled.Pressable`
-  width: 110px;
-  height: 42px;
-  align-items: center;
+export const Button = styled.Pressable`
+  margin-right: 10px;
+  padding: 5px 12px;
+  background-color: #418cfd;
+  border-radius: 4px;
   justify-content: center;
-  border-radius: 8px;
-  background-color: #428cfd;
+  align-items: center;
 `;
 
-export const ShareText = styled.Text`
+export const ButtonText = styled.Text`
   color: #fff;
   font-weight: bold;
-  font-style: italic;
-  font-size: 18px;
-`;
-
-export const TextArea = styled.TextInput`
-  background-color: #404248;
-  width: 100%;
-  height: 100px;
-  padding: 0 20px;
-  font-weight: 500;
-  font-size: 22px;
 `;
