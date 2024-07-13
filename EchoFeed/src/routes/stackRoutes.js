@@ -29,7 +29,8 @@ export default function StackRoutes() {
         name="postuser"
         component={PostUser}
         options={{
-          headerShown: false,
+          headerTintColor: "#fff",
+          headerStyle: { backgroundColor: "#36393f" },
         }}
       />
     </Stack.Navigator>

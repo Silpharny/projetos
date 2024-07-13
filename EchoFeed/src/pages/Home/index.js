@@ -6,7 +6,14 @@ import { AuthContext } from "../../contexts/auth";
 import Card from "../../components/Card";
 
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
-import { getDocs, collection, query, orderBy, limit } from "firebase/firestore";
+import {
+  getDocs,
+  collection,
+  query,
+  orderBy,
+  limit,
+  startAfter,
+} from "firebase/firestore";
 import Header from "../../components/Header";
 import { db } from "../../firebaseConfig";
 import { ActivityIndicator, View } from "react-native";
@@ -19,17 +26,17 @@ export default function Home() {
 
   const [loading, setLoading] = useState(true);
 
+  const [loadingRefresh, setLoadingRefresh] = useState(false);
+  const [lastItem, setLastItem] = useState("");
+  const [emptyList, setEmptyList] = useState(false);
+
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
 
       async function fetchPosts() {
         const postRef = collection(db, "posts");
-        const orderPost = query(
-          postRef,
-          orderBy("createBy", "desc"),
-          limit(10)
-        );
+        const orderPost = query(postRef, orderBy("createBy", "desc"), limit(7));
 
         await getDocs(orderPost).then((data) => {
           if (isActive) {
@@ -39,7 +46,10 @@ export default function Home() {
                 ...item.data(),
                 id: item.id,
               });
+
+              setEmptyList(!!data.empty);
               setPost(postList);
+              setLastItem(data.docs[data.docs.length - 1]);
               setLoading(false);
             });
           }
@@ -54,6 +64,58 @@ export default function Home() {
     }, [])
   );
 
+  async function handleRefreshPosts() {
+    setLoadingRefresh(true);
+
+    const postRef = collection(db, "posts");
+    const orderPost = query(postRef, orderBy("createBy", "desc"), limit(7));
+
+    await getDocs(orderPost).then((data) => {
+      let postList = [];
+      data.forEach((item) => {
+        postList.push({
+          ...item.data(),
+          id: item.id,
+        });
+
+        setEmptyList(false);
+        setPost(postList);
+        setLastItem(data.docs[data.docs.length - 1]);
+      });
+    });
+    setLoadingRefresh(false);
+  }
+
+  async function getListPosts() {
+    if (emptyList) {
+      setLoading(false);
+      return null;
+    }
+
+    if (loading) return;
+
+    const postRef = collection(db, "posts");
+    const orderPost = query(
+      postRef,
+      orderBy("createBy", "desc"),
+      limit(7),
+      startAfter(lastItem)
+    );
+    await getDocs(orderPost).then((data) => {
+      const postList = [];
+      data.forEach((item) => {
+        postList.push({
+          ...item.data(),
+          id: item.id,
+        });
+      });
+      setEmptyList(!!data.empty);
+      setLastItem(data.docs[data.docs.length - 1]);
+      setPost((oldPosts) => [...oldPosts, ...postList]);
+      setLoading(false);
+    });
+  }
+
   return (
     <Container>
       <Header />
@@ -67,9 +129,13 @@ export default function Home() {
         <CardList
           data={post}
           keyExtractor={(item) => String(item.id)}
-          renderItem={({ item }) => <Card data={item} />}
-          userId={authUser?.uid}
+          renderItem={({ item }) => <Card data={item} userId={authUser?.uid} />}
+          //userId={authUser?.uid}
           showsVerticalScrollIndicator={false}
+          refreshing={loadingRefresh}
+          onRefresh={handleRefreshPosts}
+          onEndReached={() => getListPosts()}
+          onEndReachedThreshold={0.1}
         />
       )}
       <ButtonPost onPress={() => navigation.navigate("newpost")}>
