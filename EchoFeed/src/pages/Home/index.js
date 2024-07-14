@@ -130,7 +130,6 @@ export default function Home() {
           data={post}
           keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => <Card data={item} userId={authUser?.uid} />}
-          //userId={authUser?.uid}
           showsVerticalScrollIndicator={false}
           refreshing={loadingRefresh}
           onRefresh={handleRefreshPosts}
