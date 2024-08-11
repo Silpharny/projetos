@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom"
+import { useEffect } from "react"
+import { Link, useNavigate } from "react-router-dom"
 import Logo from "../../assets/logo.svg"
 import { Container } from "../../components/container"
 import { Input } from "../../components/input"
@@ -6,6 +7,9 @@ import { Input } from "../../components/input"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+
+import { auth } from "../../services/firebaseConnection"
+import { signInWithEmailAndPassword, signOut } from "firebase/auth"
 
 const schema = z.object({
   email: z
@@ -21,6 +25,8 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>
 export function Login() {
+  const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
@@ -30,8 +36,24 @@ export function Login() {
     mode: "onChange",
   })
 
-  function onSubmit(data: FormData) {
-    console.log(data)
+  useEffect(() => {
+    async function signOutUser() {
+      await signOut(auth)
+    }
+
+    signOutUser()
+  }, [])
+
+  async function onSubmit(data: FormData) {
+    await signInWithEmailAndPassword(auth, data.email, data.password)
+      .then((userCredential) => {
+        console.log("Logado com sucesso!")
+        console.log(userCredential)
+        navigate("/dashboard", { replace: true })
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
   return (
@@ -42,10 +64,10 @@ export function Login() {
         </Link>
 
         <form
-          className="bg-white max-w-xl w-full rounded-lg"
+          className="bg-white max-w-xl w-full rounded-lg p-4"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <div className="flex flex-col gap-4 p-4">
+          <div className="flex flex-col gap-4 ">
             <Input
               type="email"
               placeholder="Digite seu email..."
@@ -62,12 +84,14 @@ export function Login() {
             />
           </div>
           <button
-            className="bg-red-500 rounded-lg h-9 px-8 text-white font-medium text-lg"
+            className="bg-red-500 w-full mt-4 rounded-lg h-9 px-8 text-white font-medium text-lg"
             type="submit"
           >
             Acessar
           </button>
         </form>
+
+        <Link to="/register">Ainda não possui uma conta? Cadastre-se</Link>
       </div>
     </Container>
   )

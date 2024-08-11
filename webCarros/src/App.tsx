@@ -11,14 +11,31 @@ import { New } from "./pages/Dashboard/New"
 //Layout
 import { Layout } from "./components/layout"
 
+//Controle de rota
+import { Private } from "./routes/private"
+
 export const router = createBrowserRouter([
   {
     element: <Layout />,
     children: [
       { path: "/", element: <Home /> },
       { path: "/car/:id", element: <CarDetail /> },
-      { path: "/dashboard", element: <Dashboard /> },
-      { path: "/dashboard/new", element: <New /> },
+      {
+        path: "/dashboard",
+        element: (
+          <Private>
+            <Dashboard />
+          </Private>
+        ),
+      },
+      {
+        path: "/dashboard/new",
+        element: (
+          <Private>
+            <New />
+          </Private>
+        ),
+      },
     ],
   },
   { path: "/login", element: <Login /> },

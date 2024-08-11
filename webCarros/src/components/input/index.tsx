@@ -18,7 +18,7 @@ export function Input({
   rules,
 }: InputProps) {
   return (
-    <div>
+    <>
       <input
         className="w-full border-2 rounded-md h-11 px-2 outline-none"
         type={type}
@@ -27,6 +27,6 @@ export function Input({
         id={name}
       />
       {error && <span className="text-red-500">{error}</span>}
-    </div>
+    </>
   )
 }
