@@ -9,13 +9,15 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { AuthContext } from "../../../contexts/authContext"
 import { v4 as uuidV4 } from "uuid"
-import { storage } from "../../../services/firebaseConnection"
+import { db, storage } from "../../../services/firebaseConnection"
 import {
   ref,
   uploadBytes,
   getDownloadURL,
   deleteObject,
 } from "firebase/storage"
+import { addDoc, collection } from "firebase/firestore"
+import toast from "react-hot-toast"
 
 const schema = z.object({
   name: z.string().nonempty("O campo nome é obrigatório"),
@@ -51,6 +53,7 @@ interface ImageItemProps {
 export function New() {
   const { user } = useContext(AuthContext)
   const {
+    reset,
     register,
     handleSubmit,
     formState: { errors },
@@ -68,7 +71,7 @@ export function New() {
       if (image.type === "image/jpeg" || image.type === "image/png") {
         await handleUpload(image)
       } else {
-        alert("Formato inválido")
+        toast.error("Formato de imagem inválido")
         return
       }
     }
@@ -99,7 +102,42 @@ export function New() {
   }
 
   function onSubmit(data: FormData) {
-    console.log(data)
+    if (carImages.length === 0) {
+      toast.error("Insira pelo menos uma imagem")
+      return
+    }
+
+    const carListImages = carImages.map((car) => {
+      return {
+        uid: car.uid,
+        name: car.name,
+        url: car.url,
+      }
+    })
+
+    addDoc(collection(db, "cars"), {
+      name: data.name.toUpperCase(),
+      model: data.model,
+      year: data.year,
+      km: data.km,
+      price: data.price,
+      city: data.city,
+      whatsapp: data.whatsapp,
+      description: data.description,
+      created: new Date(),
+      owner: user?.name,
+      uid: user?.uid,
+      images: carListImages,
+    })
+      .then(() => {
+        reset()
+        setCarImages([])
+        toast.success("Carro criado com sucesso")
+      })
+      .catch((err) => {
+        console.error(err)
+        toast.error("Erro ao criar carro")
+      })
   }
 
   async function handleDeleteImage(image: ImageItemProps) {

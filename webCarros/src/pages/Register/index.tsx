@@ -16,6 +16,7 @@ import {
   updateProfile,
 } from "firebase/auth"
 import { useContext, useEffect } from "react"
+import toast from "react-hot-toast"
 
 const schema = z.object({
   name: z.string().nonempty("O campo nome é obrigatório"),
@@ -59,7 +60,7 @@ export function Register() {
           displayName: data.name,
         })
 
-        console.log("Cadastrado com sucesso!")
+        toast.success("Cadastrado com sucesso!")
         handleUserInfo({
           uid: userCredential.user.uid,
           name: userCredential.user.displayName,
@@ -71,6 +72,7 @@ export function Register() {
       })
       .catch((error) => {
         console.error(error)
+        toast.error("Erro ao fazer cadastro")
       })
   }
 
